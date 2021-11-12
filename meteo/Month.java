@@ -13,25 +13,48 @@ public class Month {
     private LinkedList<Day> list = null;
     private String month = null;
     private String daysData = null;
+    private Parser parser = null;
 
     //----------------------------] CONSTRUCTOR [----------------------------
     public Month(String month, String daysData){
         this.month = month;
         this.daysData =daysData;
+        parser = new Parser();
         list = new LinkedList<Day>();
+        initzializeDays();
     }
 
     //----------------------------] METHODS [----------------------------
 
     /**
+     * Method that inserts all the data 
+     * into new days objects
+     */
+    public void initzializeDays(){
+        String data[] = parser.splitLines(daysData);
+
+        for (int i = 1; i < data.length; i++) {
+            String line []= data[i].split(";");
+            if(line[1] != "" || line[0] != ""){
+                String rain = line [13];
+                String phenomena = line[14];
+                line[13] = "-100";
+                line[14] = "-100";
+                int day[] = parser.convertToInt(data[i].split(";"));
+                addDay(day[1],day[9], day[2], day[3], day[4], day[7], rain, phenomena);
+            }
+        }
+    }
+
+    /**
      * Method that adds a new day in the month
      * with all the informations
      */
-    public void addDay( int wind, int midTemp, int minTemp, int maxTemp, int  humidity, String rain, String phenomena) {
+    public void addDay( int day,int wind, int midTemp, int minTemp, int maxTemp, int  humidity, String rain, String phenomena) {
         if(list == null)
             list.add(new Day(0, wind, midTemp, minTemp, maxTemp, humidity, rain, phenomena));
         else if(list.size() != 31)
-            list.add(new Day(list.size()+1, wind, midTemp, minTemp, maxTemp, humidity, rain, phenomena));
+            list.add(new Day(day, wind, midTemp, minTemp, maxTemp, humidity, rain, phenomena));
         else
             System.out.println("Full Month Error!");
     }
@@ -68,7 +91,7 @@ public class Month {
      * 
      * @return medium Temperature of the month
     */
-    public int getMediumTemp(){
+    public float getMediumTemp(){
         int result = 0;
         int count = 0;
         
@@ -86,7 +109,7 @@ public class Month {
      * 
      * @return medium Humidity of the month
     */
-    public String getMediumHumidity(){
+    public float getMediumHumidity(){
         int result = 0;
         int count = 0;
         
@@ -95,7 +118,7 @@ public class Month {
             count++;
         }
 
-        return (result/count)+"%";
+        return (result/count);
     }
 
     /**

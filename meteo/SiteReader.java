@@ -92,71 +92,82 @@ public class SiteReader {
         // Support Variables
         String line = null;
 
+        // Empty year 
         if( monthIndex == -1){
-            System.err.println("Set a month");
+            System.err.println("Set a month first!");
         }else{
-            try {
+            // Verify index
+            if(monthIndex <= month.length){
+                try {
 
-                // Connection to the site
-                url = new URL(queryString);
-                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                    setMonth(monthIndex);
 
-                // Reading lines 
-                while ((line = br.readLine()) != null) 
-                    fileContent += line;
-                
-                br.close();
-            } catch (IOException e) {
-                System.out.println(e);
+                    // Connection to the site
+                    url = new URL(queryString);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+
+                    // Reading lines 
+                    while ((line = br.readLine()) != null) 
+                        fileContent += line;
+                    
+                    br.close();
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+            }else{
+                System.err.println("No such month! Please select a valid month.");
             }
         }
-        setLines(fileContent);
         url = null;
         return fileContent;
 
     }
 
+    /**
+     * Method that reads file content 
+     * from web, with a given value
+     * 
+     * @param monthIndex value that refers to a value int the month[] array
+     * @return [] the month name & file content
+     */
     public String[] getFile(int monthIndex){
 
         // Support Variables
         String line = null;
         String content[] = new String[2];
 
+        // Empty year 
         if( monthIndex == -1){
-            System.err.println("Set a month");
+            System.err.println("Set a month first!");
         }else{
-            try {
+            // Verify index
+            if(monthIndex <= month.length){
+                try {
+                    
+                    setMonth(monthIndex);
+                    content[0] = month[monthIndex];
+                    // Connection to the site
+                    url = new URL(queryString);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 
-                setMonth(monthIndex);
-                content[0] = month[monthIndex];
-                // Connection to the site
-                url = new URL(queryString);
-                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-
-                // Reading lines 
-                while ((line = br.readLine()) != null) 
-                content[1] += line;
+                    // Reading lines 
+                    while ((line = br.readLine()) != null) 
+                    content[1] += line;
+                    
+                    br.close();
                 
-                br.close();
-            } catch (IOException e) {
-                System.out.println(e);
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+            }else{
+                System.err.println("No such month! Please select a valid month.");
             }
         }
-        setLines(content[1]);
         url = null;
         return content;
 
     }
 
-    /**
-     * Method tha extracts each line of the 
-     * file content in a string array
-     * 
-     * @param content to be separated
-     */
-    private void setLines(String content){
-        contentLines = content.split("\n");
-    }
 
 
 }

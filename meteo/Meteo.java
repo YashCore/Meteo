@@ -4,15 +4,24 @@
 
 package meteo;
 
-import java.util.LinkedList;
+import java.util.HashMap;
+
 
 public class Meteo {
 
-    LinkedList<Year> list = null;
+    HashMap<String,Year> map = null;
     SiteReader reader = null;
 
-    public Meteo(String year){
-        list = new LinkedList<Year>();
+    public Meteo(){
+        map = new HashMap<String,Year>();
+    }
+
+    public void addYear(String year){
+        map.put(year, new Year(year));
+    }
+
+    public Year get(String index){
+        return map.get(index);
     }
     
 }
